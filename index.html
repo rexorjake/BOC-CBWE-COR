@@ -7,129 +7,98 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --boc-blue: #002d5a; --boc-gold: #c5a059; --light-bg: #f4f7f9; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--light-bg); margin: 0; display: flex; flex-direction: column; min-height: 100vh; color: #333; }
-        header { background: var(--boc-blue); color: white; padding: 30px 20px; border-bottom: 5px solid var(--boc-gold); text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .logo-main { font-size: 2.5rem; font-weight: 900; letter-spacing: 4px; margin: 0; }
-        .logo-sub { font-size: 0.85rem; letter-spacing: 1.5px; opacity: 0.9; margin-top: 5px; text-transform: uppercase; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--light-bg); margin: 0; display: flex; flex-direction: column; min-height: 100vh; color: #333; }
+        header { background: var(--boc-blue); color: white; padding: 30px 20px; border-bottom: 5px solid var(--boc-gold); text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border-top: 6px solid var(--boc-blue); }
-        h2 { color: var(--boc-blue); margin-top: 0; margin-bottom: 25px; font-size: 1.6rem; text-align: center; font-weight: 700; }
+        .card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border-top: 6px solid var(--boc-blue); text-align: center; }
         .input-group { margin-bottom: 18px; text-align: left; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; font-size: 0.9rem; }
-        input { width: 100%; padding: 14px; border: 1px solid #ccd0d5; border-radius: 8px; box-sizing: border-box; font-size: 1rem; transition: border-color 0.2s; }
-        input:focus { outline: none; border-color: var(--boc-blue); box-shadow: 0 0 0 3px rgba(0,45,90,0.1); }
-        button { width: 100%; padding: 16px; background: var(--boc-blue); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        button:hover { background: #004080; transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
-        button:disabled { background: #adb5bd; cursor: not-allowed; transform: none; }
-        #message { margin-top: 25px; text-align: center; min-height: 60px; }
-        .error-box { background: #fff5f5; color: #c53030; padding: 15px; border-radius: 8px; border: 1px solid #feb2b2; font-size: 0.95rem; line-height: 1.4; }
-        .success-box { background: #e7f3ef; color: #2d5a45; padding: 20px; border-radius: 8px; border: 1px solid #d1e7dd; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-        .download-btn { display: inline-block; margin-top: 15px; padding: 12px 25px; background: var(--boc-gold); color: white; text-decoration: none; border-radius: 6px; font-weight: bold; transition: background 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .download-btn:hover { background: #b18e4a; }
-        footer { text-align: center; padding: 25px; font-size: 0.8rem; color: #777; background: white; border-top: 1px solid #eee; }
+        input { width: 100%; padding: 14px; border: 1px solid #ccd0d5; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        button { width: 100%; padding: 16px; background: var(--boc-blue); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        button:hover { background: #004080; }
+        button:disabled { background: #adb5bd; cursor: not-allowed; }
+        #message { margin-top: 25px; min-height: 60px; }
+        .error-box { background: #fff5f5; color: #c53030; padding: 15px; border-radius: 8px; border: 1px solid #feb2b2; }
+        .success-box { background: #e7f3ef; color: #2d5a45; padding: 20px; border-radius: 8px; border: 1px solid #d1e7dd; }
+        .download-btn { display: inline-block; margin-top: 15px; padding: 12px 25px; background: var(--boc-gold); color: white; text-decoration: none; border-radius: 6px; font-weight: bold; }
+        footer { text-align: center; padding: 25px; font-size: 0.8rem; color: #666; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 class="logo-main">B.E.R.T.H.</h1>
-    <div class="logo-sub">BOC Examination Rating Transfer Host</div>
+    <h1 style="margin:0; letter-spacing:4px;">B.E.R.T.H.</h1>
+    <div style="font-size: 0.85rem; opacity: 0.9; margin-top: 5px;">BOC EXAMINATION RATING TRANSFER HOST</div>
 </header>
 
 <div class="container">
     <div class="card">
-        <h2>Secure Rating Download</h2>
-        
-        <div class="input-group">
-            <label>Full Name (First Middle Last)</label>
-            <input type="text" id="fullName" placeholder="e.g. JUAN Q. DELA CRUZ">
-        </div>
-
+        <h2 style="color: var(--boc-blue); margin-top:0;">Secure Rating Download</h2>
         <div class="input-group">
             <label>Registered Email Address</label>
-            <input type="email" id="email" placeholder="email@example.com">
+            <input type="email" id="email" placeholder="e.g. juan.delacruz@example.com">
         </div>
-
         <div class="input-group">
             <label>Contact Number (as registered)</label>
-            <input type="text" id="contact" placeholder="9171234567">
+            <input type="text" id="contact" placeholder="e.g. 9171234567">
         </div>
-
         <button id="submitBtn" onclick="verifyUser()">GENERATE CERTIFICATE PDF</button>
-        
         <div id="message"></div>
     </div>
 </div>
 
 <footer>
-    &copy; 2026 Bureau of Customs. All Rights Reserved. <br>
-    Official Score Retrieval System | Secure & Confidential Information
+    &copy; 2026 Bureau of Customs | Official Score Retrieval System
 </footer>
 
 <script>
-    // --- CONFIGURATION ---
-    const SB_URL = "https://ywbppvtwsnmloqgwhxla.supabase.co"; 
-    const SB_KEY = "sb_publishable_wAqtDS8qfZM2urgJX9I6Dg_MUIIf7pz"; 
-    // ---------------------
+    // These two lines are the ONLY places where these variables are defined
+    const sbUrl = "https://ywbppvtwsnmloqgwhxla.supabase.co"; 
+    const sbKey = "sb_publishable_wAqtDS8qfZM2urgJX9I6Dg_MUIIf7pz"; 
 
-    const supabase = window.supabase.createClient(SB_URL, SB_KEY);
+    const client = window.supabase.createClient(sbUrl, sbKey);
 
     async function verifyUser() {
         const btn = document.getElementById('submitBtn');
         const msg = document.getElementById('message');
-        
-        const nameInput = document.getElementById('fullName').value.trim();
         const emailInput = document.getElementById('email').value.trim().toLowerCase();
         let contactInput = document.getElementById('contact').value.trim();
 
-        // Auto-fix: Remove leading zero if user includes it (e.g. 0917 -> 917)
-        if (contactInput.startsWith('0')) {
-            contactInput = contactInput.substring(1);
-        }
+        // Fix: Remove leading 0 if the user adds it
+        if (contactInput.startsWith('0')) { contactInput = contactInput.substring(1); }
 
         if (!emailInput || !contactInput) {
-            msg.innerHTML = "<div class='error-box'><strong>Notice:</strong> Please fill in all required fields to proceed.</div>";
+            msg.innerHTML = "<div class='error-box'>Please fill in all fields.</div>";
             return;
         }
 
         btn.disabled = true;
-        msg.innerHTML = "<p style='color: #666;'>Authenticating with Bureau records...</p>";
+        msg.innerHTML = "Authenticating...";
 
         try {
-            // Query the 'COR' table using your specific column names
-            const { data, error } = await supabase
+            const { data, error } = await client
                 .from('COR')
                 .select('*')
                 .eq('EMAIL ADDRESS REGISTERED ON IAMS', emailInput)
                 .eq('CONTACT NO. REGISTERED ON IAMS', contactInput);
 
             if (error || !data || data.length === 0) {
-                // If no record found
-                msg.innerHTML = `
-                    <div class="error-box">
-                        <strong>❌ Incorrect Details</strong><br>
-                        The Email or Contact Number does not match our records. Please ensure accuracy or contact HRMD.
-                    </div>`;
+                msg.innerHTML = "<div class='error-box'><strong>❌ Incorrect Details</strong><br>No matching record found.</div>";
                 btn.disabled = false;
             } else {
-                // Record found
                 const record = data[0];
-                const downloadUrl = record['COR URL'];
-
                 msg.innerHTML = `
                     <div class="success-box">
-                        <strong style="font-size: 1.1rem;">✅ Identity Verified!</strong><br>
-                        <p style="margin: 10px 0;">Rating for: <strong>${record['POSITION'] || 'BOC Examinee'}</strong></p>
-                        <a href="${downloadUrl}" target="_blank" class="download-btn">📥 DOWNLOAD CERTIFICATE</a>
+                        <strong>✅ Verified!</strong><br>
+                        Position: ${record['POSITION'] || 'Applicant'}<br><br>
+                        <a href="${record['COR URL']}" target="_blank" class="download-btn">📥 DOWNLOAD PDF</a>
                     </div>`;
             }
         } catch (err) {
-            console.error(err);
-            msg.innerHTML = "<div class='error-box'><strong>System Error:</strong> Unable to connect to the database. Please try again later.</div>";
+            msg.innerHTML = "<div class='error-box'>System busy. Please try again.</div>";
             btn.disabled = false;
         }
     }
 </script>
-
 </body>
 </html>
