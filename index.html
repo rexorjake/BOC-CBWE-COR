@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B.E.R.T.H. | BOC Examination Rating Transfer Host</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { --boc-blue: #002d5a; --boc-gold: #c5a059; --light-bg: #f4f7f9; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--light-bg); margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        header { background: var(--boc-blue); color: white; padding: 20px; border-bottom: 4px solid var(--boc-gold); text-align: center; }
+        .logo-sub { font-size: 0.9rem; letter-spacing: 1px; opacity: 0.9; margin-top: 5px; }
+        .container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border-top: 5px solid var(--boc-blue); }
+        h2 { color: var(--boc-blue); margin-top: 0; font-size: 1.5rem; text-align: center; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #444; font-size: 0.9rem; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
+        input:focus { outline: none; border-color: var(--boc-blue); box-shadow: 0 0 0 2px rgba(0,45,90,0.1); }
+        button { width: 100%; padding: 15px; background: var(--boc-blue); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
+        button:hover { background: #004080; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #message { margin-top: 20px; text-align: center; font-size: 0.95rem; line-height: 1.5; }
+        .success-box { background: #e7f3ef; color: #2d5a45; padding: 15px; border-radius: 6px; border: 1px solid #d1e7dd; }
+        .error-text { color: #dc3545; font-weight: 600; }
+        footer { text-align: center; padding: 20px; font-size: 0.8rem; color: #777; }
+        .download-btn { display: inline-block; margin-top: 10px; padding: 10px 20px; background: var(--boc-gold); color: white; text-decoration: none; border-radius: 4px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div style="font-size: 1.8rem; font-weight: 800; letter-spacing: 2px;">B.E.R.T.H.</div>
+    <div class="logo-sub">BOC EXAMINATION RATING TRANSFER HOST</div>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h2>Secure Rating Download</h2>
+        <div class="input-group">
+            <label>Full Name (First Middle Last)</label>
+            <input type="text" id="fullName" placeholder="e.g. JUAN Q. DELA CRUZ">
+        </div>
+        <div class="input-group">
+            <label>Registered Email Address</label>
+            <input type="email" id="email" placeholder="email@example.com">
+        </div>
+        <div class="input-group">
+            <label>Contact Number</label>
+            <input type="text" id="contact" placeholder="09123456789">
+        </div>
+        <button id="submitBtn" onclick="verifyUser()">GENERATE CERTIFICATE PDF</button>
+        <div id="message"></div>
+    </div>
+</div>
+
+<footer>
+    &copy; 2026 Bureau of Customs. All Rights Reserved. <br>
+    Official Score Retrieval System | Secure & Confidential
+</footer>
+
+<script>
+    // --- CONFIGURATION ---
+    const SB_URL = "YOUR_SUPABASE_URL"; 
+    const SB_KEY = "YOUR_SUPABASE_ANON_KEY"; 
+    // ---------------------
+
+    const supabase = window.supabase.createClient(SB_URL, SB_KEY);
+
+    async function verifyUser() {
+        const btn = document.getElementById('submitBtn');
+        const msg = document.getElementById('message');
+        const name = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const contact = document.getElementById('contact').value.trim();
+
+        if (!name || !email || !contact) {
+            msg.innerHTML = "<span class='error-text'>Please fill out all fields.</span>";
+            return;
+        }
+
+        btn.disabled = true;
+        msg.innerHTML = "Verifying credentials...";
+
+        try {
+            const { data, error } = await supabase
+                .from('examinees') // Your table name
+                .select('cert_url')
+                .eq('full_name', name)
+                .eq('email', email)
+                .eq('contact_number', contact)
+                .single();
+
+            if (error || !data) {
+                msg.innerHTML = "<span class='error-text'>Authentication failed. Please ensure your details match your exam registration exactly.</span>";
+                btn.disabled = false;
+            } else {
+                msg.innerHTML = `
+                    <div class="success-box">
+                        <strong>Identity Verified!</strong><br>
+                        Your Certificate of Rating is ready.<br><br>
+                        <a href="${data.cert_url}" target="_blank" class="download-btn">📥 DOWNLOAD PDF</a>
+                    </div>`;
+            }
+        } catch (err) {
+            msg.innerHTML = "<span class='error-text'>Server busy. Please try again in a few moments.</span>";
+            btn.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>
