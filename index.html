@@ -636,7 +636,7 @@
             if (error) {
                 msg.innerHTML = `<div class='error-box'>❌ <strong>Database Error</strong><br>${error.message}</div>`;
             } else if (!data || data.length === 0) {
-                msg.innerHTML = "<div class='error-box'>❌ <strong>No Record Found</strong><br>The details you entered don't match any record in our system. Please double-check your registered email and contact number.</div>";
+                msg.innerHTML = "<div class='error-box'>❌ <strong>No Record Found</strong><br>The details you entered don't match any record in our system. Please double-check your registered email and contact number. When entering your contact number, omit the leading zero (e.g., use 9123456789 instead of 09123456789).</div>";
             } else {
                 const record = data[0];
                 const corUrl = record['COR URL'];
